@@ -77,7 +77,7 @@ void loop() {
         break;
       default:
         if (cnt < 12) {
-          //calculate aktive sound
+          //calculate active sound
           sounds[11 - cnt] = bitRead(data, 1);
           sounds[23 - cnt] = bitRead(data, 2);
           sounds[35 - cnt] = bitRead(data, 4);
