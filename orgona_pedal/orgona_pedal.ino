@@ -4,8 +4,8 @@ bool reset = false;
 bool sounds[36];
 
 void setup() {
-  Serial1.begin(35000);
-  //Serial.begin(38400);
+  Serial1.begin(39000);
+  Serial.begin(38400);
   pinMode(2, OUTPUT);   //data bus 0
   pinMode(3, OUTPUT);   //data bus 1
   pinMode(4, OUTPUT);   //data bus 2
@@ -109,12 +109,13 @@ void loop() {
   int data = 0;
   if (Serial1.available() > 0) {
     data = Serial1.read();
+    Serial.println(data);
     //sw start
     switch (data) {
-      case 124:
+      case 248: //35000 124
         reset = true;
         break;
-      case 240:
+      case 240: // 35000 240
         if (reset) {
           reset = false;
           flash();
