@@ -2,10 +2,11 @@ bool registers[4][8];
 int cnt = 0;
 bool reset = false;
 bool sounds[36];
+bool sub = false;
 
 void setup() {
   Serial1.begin(39000);
-  Serial.begin(38400);
+  //Serial.begin(38400);
   pinMode(2, OUTPUT);   //data bus 0
   pinMode(3, OUTPUT);   //data bus 1
   pinMode(4, OUTPUT);   //data bus 2
@@ -55,18 +56,22 @@ pin 13 -> G1 pin -> DEMUX
 */
 
 void flash() {
-  int db = 0;
-  if (sounds[24])
-    Serial.println("I");
+  //if (sounds[24])
+   // Serial.println("I");
   for (int i = 0; i < 27; i++) {
     registers[i / 8][i % 8] = sounds[i];
   }
   //Serial.println(registers[3][3]);
   digitalWrite(13, LOW);
+ // if (sub != registers[3][3]) {
+    //Serial.println("HIBA");
+  //}
+  //sub = registers[3][3];
   for (int k = 0; k < 4; k++) {
     digitalWrite(13, LOW);
     /*
     */
+    //Serial.println(registers[k][0]);
     digitalWrite(12, bitRead(k, 2));
     digitalWrite(11, bitRead(k, 1));
     digitalWrite(10, bitRead(k, 0));
@@ -79,7 +84,7 @@ void flash() {
     digitalWrite(pinselect(6), !registers[k][6]);
     digitalWrite(pinselect(7), !registers[k][7]);
 
-    //delay(1);
+    delay(1);
     //delay(5);
     digitalWrite(13, HIGH);
     //delay(1);
@@ -109,7 +114,7 @@ void loop() {
   int data = 0;
   if (Serial1.available() > 0) {
     data = Serial1.read();
-    Serial.println(data);
+    //Serial.println(data);
     //sw start
     switch (data) {
       case 248: //35000 124
@@ -131,12 +136,14 @@ void loop() {
           registers[(36-cnt)/8][(36-cnt)%8] = bitRead(data, 3);
           */
           //Serial.println(data);
-          sounds[11 - cnt] = bitRead(data, 1);
-          sounds[23 - cnt] = bitRead(data, 2);
+          sounds[11 - cnt] = bitRead(data, 2);
+          sounds[23 - cnt] = bitRead(data, 3);
           sounds[35 - cnt] = bitRead(data, 4);
         } else if (cnt == 12) {
           for (int i = 3; i < 6; i++)
-            registers[3][i] = bitRead(data, i + 1);
+            registers[3][3] = bitRead(data, 4);
+            registers[3][4] = bitRead(data, 5);
+            registers[3][5] = bitRead(data, 7);
         }
         cnt++;
         break;
