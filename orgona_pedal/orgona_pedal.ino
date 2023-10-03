@@ -1,3 +1,5 @@
+#include <digitalWriteFast.h>
+
 bool registers[4][8];
 int cnt = 0;
 bool reset = false;
@@ -62,31 +64,31 @@ void flash() {
     registers[i / 8][i % 8] = sounds[i];
   }
   //Serial.println(registers[3][3]);
-  digitalWrite(13, LOW);
+  digitalWriteFast(13, LOW);
  // if (sub != registers[3][3]) {
     //Serial.println("HIBA");
   //}
   //sub = registers[3][3];
   for (int k = 0; k < 4; k++) {
-    digitalWrite(13, LOW);
+    digitalWriteFast(13, LOW);
     /*
     */
     //Serial.println(registers[k][0]);
-    digitalWrite(12, bitRead(k, 2));
-    digitalWrite(11, bitRead(k, 1));
-    digitalWrite(10, bitRead(k, 0));
-    digitalWrite(pinselect(0), !registers[k][0]);
-    digitalWrite(pinselect(1), !registers[k][1]);
-    digitalWrite(pinselect(2), !registers[k][2]);
-    digitalWrite(pinselect(3), !registers[k][3]);
-    digitalWrite(pinselect(4), !registers[k][4]);
-    digitalWrite(pinselect(5), !registers[k][5]);
-    digitalWrite(pinselect(6), !registers[k][6]);
-    digitalWrite(pinselect(7), !registers[k][7]);
+    digitalWriteFast(12, bitRead(k, 2));
+    digitalWriteFast(11, bitRead(k, 1));
+    digitalWriteFast(10, bitRead(k, 0));
+    digitalWriteFast(pinselect(0), !registers[k][0]);
+    digitalWriteFast(pinselect(1), !registers[k][1]);
+    digitalWriteFast(pinselect(2), !registers[k][2]);
+    digitalWriteFast(pinselect(3), !registers[k][3]);
+    digitalWriteFast(pinselect(4), !registers[k][4]);
+    digitalWriteFast(pinselect(5), !registers[k][5]);
+    digitalWriteFast(pinselect(6), !registers[k][6]);
+    digitalWriteFast(pinselect(7), !registers[k][7]);
 
     delay(1);
     //delay(5);
-    digitalWrite(13, HIGH);
+    digitalWriteFast(13, HIGH);
     //delay(1);
     /*if (4) {
       Serial.print(bitRead(k,2));
@@ -102,7 +104,7 @@ void flash() {
       Serial.println(!registers[k][7]);
     }*/
     //talán delay()
-    digitalWrite(13, LOW);
+    digitalWriteFast(13, LOW);
     // delay(1);
   }
 }
