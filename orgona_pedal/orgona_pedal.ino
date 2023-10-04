@@ -3,7 +3,7 @@
 bool registers[4][8];
 int cnt = 0;
 bool reset = false;
-bool sounds[36];
+bool sounds[27];
 bool sub = false;
 
 void setup() {
@@ -58,21 +58,19 @@ pin 13 -> G1 pin -> DEMUX
 */
 
 void flash() {
+  noInterrupts();
   //if (sounds[24])
-   // Serial.println("I");
+  // Serial.println("I");
   for (int i = 0; i < 27; i++) {
     registers[i / 8][i % 8] = sounds[i];
   }
   //Serial.println(registers[3][3]);
-  digitalWriteFast(13, LOW);
- // if (sub != registers[3][3]) {
-    //Serial.println("HIBA");
+  // if (sub != registers[3][3]) {
+  //Serial.println("HIBA");
   //}
   //sub = registers[3][3];
+  digitalWriteFast(13, LOW);
   for (int k = 0; k < 4; k++) {
-    digitalWriteFast(13, LOW);
-    /*
-    */
     //Serial.println(registers[k][0]);
     digitalWriteFast(12, bitRead(k, 2));
     digitalWriteFast(11, bitRead(k, 1));
@@ -107,6 +105,7 @@ void flash() {
     digitalWriteFast(13, LOW);
     // delay(1);
   }
+  interrupts();
 }
 
 
@@ -119,13 +118,14 @@ void loop() {
     //Serial.println(data);
     //sw start
     switch (data) {
-      case 248: //35000 124
+      case 248:  //35000 124
         reset = true;
         break;
-      case 240: // 35000 240
+      case 240:  // 35000 240
         if (reset) {
           reset = false;
-          flash();
+          if(cnt >= 12)
+            flash();
           cnt = 0;
         }
         break;
@@ -142,10 +142,9 @@ void loop() {
           sounds[23 - cnt] = bitRead(data, 3);
           sounds[35 - cnt] = bitRead(data, 4);
         } else if (cnt == 12) {
-          for (int i = 3; i < 6; i++)
-            registers[3][3] = bitRead(data, 4);
-            registers[3][4] = bitRead(data, 5);
-            registers[3][5] = bitRead(data, 7);
+          registers[3][3] = bitRead(data, 4);
+          registers[3][4] = bitRead(data, 5);
+          registers[3][5] = bitRead(data, 7);
         }
         cnt++;
         break;
