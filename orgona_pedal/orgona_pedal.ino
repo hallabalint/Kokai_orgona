@@ -7,6 +7,7 @@ bool sounds[27];
 bool sub = false;
 
 void setup() {
+  //Serial1.begin(39000);
   Serial1.begin(39000);
   //Serial.begin(38400);
   pinMode(2, OUTPUT);   //data bus 0
@@ -68,8 +69,8 @@ void flash() {
   // if (sub != registers[3][3]) {
   //Serial.println("HIBA");
   //}
-  //sub = registers[3][3];
-  digitalWriteFast(13, LOW);
+  //registers[3][5] = 1;
+  digitalWriteFast(13, HIGH);
   for (int k = 0; k < 4; k++) {
     //Serial.println(registers[k][0]);
     digitalWriteFast(12, bitRead(k, 2));
@@ -84,9 +85,9 @@ void flash() {
     digitalWriteFast(pinselect(6), !registers[k][6]);
     digitalWriteFast(pinselect(7), !registers[k][7]);
 
-    delay(1);
+    //delay(1);
     //delay(5);
-    digitalWriteFast(13, HIGH);
+    digitalWriteFast(13, LOW);
     //delay(1);
     /*if (4) {
       Serial.print(bitRead(k,2));
@@ -102,7 +103,7 @@ void flash() {
       Serial.println(!registers[k][7]);
     }*/
     //talán delay()
-    digitalWriteFast(13, LOW);
+    digitalWriteFast(13, HIGH);
     // delay(1);
   }
   interrupts();
@@ -127,8 +128,8 @@ void loop() {
           if(cnt >= 12)
             flash();
           cnt = 0;
-        }
-        break;
+          break;
+        } 
       default:
 
         if (cnt < 12) {
